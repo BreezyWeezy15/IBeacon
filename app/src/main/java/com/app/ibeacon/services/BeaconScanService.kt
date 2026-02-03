@@ -9,6 +9,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import android.os.RemoteException
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.app.ibeacon.MainActivity
 import com.app.ibeacon.R
@@ -47,6 +48,16 @@ class BeaconScanService : Service(), BeaconConsumer {
     override fun onBeaconServiceConnect() {
         beaconManager.addRangeNotifier { beacons, _ ->
             beacons.forEach { beacon ->
+
+                // Log all beacon values for debugging
+                Log.d(
+                    "BeaconScan",
+                    "UUID: ${beacon.id1}, Major: ${beacon.id2}, Minor: ${beacon.id3}, " +
+                            "MAC: ${beacon.bluetoothAddress}, TxPower: ${beacon.txPower}, RSSI: ${beacon.rssi}, " +
+                            "Timestamp: ${System.currentTimeMillis()}, " +
+                            "Lat: $lastKnownLatitude, Lon: $lastKnownLongitude"
+                )
+
                 // Build BeaconEntity from scanned beacon
                 val entity = BeaconEntity(
                     uuid = beacon.id1.toString(),
@@ -73,6 +84,7 @@ class BeaconScanService : Service(), BeaconConsumer {
             e.printStackTrace()
         }
     }
+
 
     override fun onBind(intent: Intent?): IBinder? = null
 
