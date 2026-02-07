@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     private val repository by lazy { BeaconRepository(this) }
     private lateinit var mapView: MapView
+    private lateinit var locationProvider: LocationProvider
 
     companion object {
         private const val PERMISSION_REQUEST_CODE = 1001
@@ -38,19 +39,32 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         mapView = findViewById(R.id.map)
+        Configuration.getInstance().apply {
+            userAgentValue = packageName
+            osmdroidBasePath = filesDir
+            osmdroidTileCache = filesDir
+        }
         mapView.setMultiTouchControls(true)
-        mapView.controller.setZoom(17.0)
+        mapView.controller.setZoom(14.0)
+
+        locationProvider = LocationProvider(this)
 
         checkPermissionsAndBluetooth()
     }
 
-    // ---------------- PERMISSIONS & BLE ----------------
+    private fun startLocationUpdates() {
+        // Start receiving location updates and center map on user's location
+        locationProvider.startLocationUpdates { loc ->
+            val userPoint = GeoPoint(loc.latitude, loc.longitude)
+            mapView.controller.setCenter(userPoint)
+        }
+    }
 
     private fun checkPermissionsAndBluetooth() {
         if (!hasAllPermissions()) {
             requestPermissions()
         } else {
-            // Permissions granted, now check BLE
+            startLocationUpdates()
             ensureBluetoothEnabled()
         }
     }
@@ -60,7 +74,6 @@ class MainActivity : AppCompatActivity() {
         val manager = getSystemService(BLUETOOTH_SERVICE) as BluetoothManager
         val adapter = manager.adapter
 
-        // Android 12+ requires BLUETOOTH_CONNECT to enable BT
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
             ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT)
             != PackageManager.PERMISSION_GRANTED
@@ -73,12 +86,10 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        // Now safe to check / request enable
         if (!adapter.isEnabled) {
             val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
         } else {
-            // Bluetooth already ON, start service
             startBeaconService()
             loadBeaconsOnMap()
         }
@@ -99,13 +110,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun requiredPermissions(): MutableList<String> {
         val list = mutableListOf(Manifest.permission.ACCESS_FINE_LOCATION)
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             list.add(Manifest.permission.BLUETOOTH_SCAN)
             list.add(Manifest.permission.BLUETOOTH_CONNECT)
             list.add(Manifest.permission.BLUETOOTH_ADVERTISE)
         }
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             list.add(Manifest.permission.POST_NOTIFICATIONS)
         }
@@ -122,8 +131,14 @@ class MainActivity : AppCompatActivity() {
             grantResults.isNotEmpty() &&
             grantResults.all { it == PackageManager.PERMISSION_GRANTED }
         ) {
-            // Retry BLE after permission granted
+            startLocationUpdates()
             ensureBluetoothEnabled()
+        } else {
+            android.widget.Toast.makeText(
+                this,
+                "All permissions are required for proper functionality",
+                android.widget.Toast.LENGTH_LONG
+            ).show()
         }
     }
 
@@ -136,13 +151,10 @@ class MainActivity : AppCompatActivity() {
                 startBeaconService()
                 loadBeaconsOnMap()
             } else {
-                // User refused, show a message
                 android.widget.Toast.makeText(this, "Bluetooth is required", android.widget.Toast.LENGTH_LONG).show()
             }
         }
     }
-
-    // ---------------- SERVICE ----------------
 
     private fun startBeaconService() {
         val intent = Intent(this, BeaconScanService::class.java)
@@ -152,8 +164,6 @@ class MainActivity : AppCompatActivity() {
             startService(intent)
         }
     }
-
-    // ---------------- MAP ----------------
 
     private fun loadBeaconsOnMap() = CoroutineScope(Dispatchers.IO).launch {
         val beacons = repository.getAll()
@@ -190,5 +200,6 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         mapView.onPause()
+        locationProvider.stopLocationUpdates()
     }
 }
