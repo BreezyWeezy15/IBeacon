@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.app.ibeacon" />
+                  <option name="mobileSdkAppId" value="1:157839324195:android:41cb90ab409fe412cfed96" />
+                  <option name="projectId" value="ibeacon-86304" />
+                  <option name="projectNumber" value="157839324195" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

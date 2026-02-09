@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.google.gms.google.services)
+    alias(libs.plugins.google.firebase.crashlytics)
 }
 
 android {
@@ -39,6 +41,8 @@ android {
 dependencies {
 
     implementation (libs.androidx.room.runtime)
+    implementation(libs.firebase.database)
+    implementation(libs.firebase.crashlytics)
     kapt (libs.androidx.room.compiler)
 
     implementation (libs.play.services.location)

@@ -2,21 +2,28 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Network -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- Location (required for BLE scanning on many devices) -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <!-- Runtime permissions -->
+
+    <!-- Bluetooth runtime permissions (Android 12+) -->
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
 
     <!-- Foreground service permissions -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
+
+    <!-- Notifications (Android 13+) -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
 
-
+    <!-- BLE hardware requirement -->
     <uses-feature
         android:name="android.hardware.bluetooth_le"
         android:required="true" />

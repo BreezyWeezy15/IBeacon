@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "157839324195",
+    "firebase_url": "https://ibeacon-86304-default-rtdb.firebaseio.com",
+    "project_id": "ibeacon-86304",
+    "storage_bucket": "ibeacon-86304.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:157839324195:android:41cb90ab409fe412cfed96",
+        "android_client_info": {
+          "package_name": "com.app.ibeacon"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDywcT936FlMp-8DLAs-v8Dz4sOw_1KjlM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:157839324195:android:7031889a85f0a744cfed96",
+        "android_client_info": {
+          "package_name": "com.app.ibeaconshower"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDywcT936FlMp-8DLAs-v8Dz4sOw_1KjlM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

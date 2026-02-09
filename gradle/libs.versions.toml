@@ -15,6 +15,10 @@ osmdroidAndroid = "6.1.20"
 playServicesLocation = "21.3.0"
 playServicesMaps = "20.0.0"
 roomRuntime = "2.8.4"
+googleGmsGoogleServices = "4.4.4"
+firebaseDatabase = "22.0.1"
+firebaseCrashlytics = "20.0.4"
+googleFirebaseCrashlytics = "3.0.6"
 
 [libraries]
 android-beacon-library = { module = "org.altbeacon:android-beacon-library", version.ref = "androidBeaconLibrary" }
@@ -32,9 +36,13 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 osmdroid-android = { module = "org.osmdroid:osmdroid-android", version.ref = "osmdroidAndroid" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
+firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebaseCrashlytics" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
+google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "googleFirebaseCrashlytics" }
 
