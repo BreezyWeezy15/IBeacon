@@ -9,9 +9,9 @@
               <option name="connection">
                 <ConnectionSetting>
                   <option name="appId" value="com.app.ibeacon" />
-                  <option name="mobileSdkAppId" value="1:157839324195:android:41cb90ab409fe412cfed96" />
-                  <option name="projectId" value="ibeacon-86304" />
-                  <option name="projectNumber" value="157839324195" />
+                  <option name="mobileSdkAppId" value="1:802595476131:android:6a2076dca3ebbd1eaaa516" />
+                  <option name="projectId" value="ibeacon-de57e" />
+                  <option name="projectNumber" value="802595476131" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

@@ -6,24 +6,26 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
-import android.location.LocationManager
+import android.widget.Button
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.app.ibeacon.services.BeaconScanService
-import kotlinx.coroutines.*
-import org.osmdroid.config.Configuration
-import org.osmdroid.util.GeoPoint
-import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.Marker
+import com.google.firebase.database.FirebaseDatabase
 
 class MainActivity : AppCompatActivity() {
 
-
     private lateinit var locationProvider: LocationProvider
+
+    private val database =
+        FirebaseDatabase.getInstance().reference.child("beacons")
 
     companion object {
         private const val PERMISSION_REQUEST_CODE = 1001
@@ -34,11 +36,45 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        Configuration.getInstance().userAgentValue = packageName
         setContentView(R.layout.activity_main)
 
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+
         locationProvider = LocationProvider(this)
+
+        // 🔘 Clear DB button
+        findViewById<Button>(R.id.btnClearDb).setOnClickListener {
+            showClearConfirmation()
+        }
+
         checkPermissionsAndBluetooth()
+    }
+
+    // 🔥 Confirm before wiping database
+    private fun showClearConfirmation() {
+        AlertDialog.Builder(this)
+            .setTitle("Confirm Delete")
+            .setMessage("Are you sure you want to delete all beacons from database?")
+            .setPositiveButton("Yes") { _, _ ->
+                clearDatabase()
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    // 🔥 Clear beacons node only
+    private fun clearDatabase() {
+        database.removeValue()
+            .addOnSuccessListener {
+                println("Beacons database cleared successfully")
+            }
+            .addOnFailureListener {
+                it.printStackTrace()
+            }
     }
 
     private fun checkPermissionsAndBluetooth() {
@@ -52,12 +88,9 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-
         ensureBluetoothEnabled()
         startBeaconService()
     }
-
-
 
     private fun hasAllPermissions(): Boolean =
         requiredPermissions().all {
@@ -74,13 +107,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun requiredPermissions(): MutableList<String> {
         val list = mutableListOf(Manifest.permission.ACCESS_FINE_LOCATION)
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             list.add(Manifest.permission.BLUETOOTH_SCAN)
             list.add(Manifest.permission.BLUETOOTH_CONNECT)
         }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             list.add(Manifest.permission.POST_NOTIFICATIONS)
         }
+
         return list
     }
 
@@ -103,8 +139,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-
     private fun startBeaconService() {
         val intent = Intent(this, BeaconScanService::class.java)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
@@ -114,9 +148,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
         if (requestCode == PERMISSION_REQUEST_CODE &&
             grantResults.all { it == PackageManager.PERMISSION_GRANTED }
         ) {
@@ -126,12 +163,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
         if (requestCode == REQUEST_ENABLE_BT) {
             checkPermissionsAndBluetooth()
         }
     }
-
-
 
     override fun onPause() {
         super.onPause()
