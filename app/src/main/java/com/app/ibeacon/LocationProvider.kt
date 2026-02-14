@@ -42,15 +42,13 @@ class LocationProvider(private val context: Context) {
             return
         }
 
-        // Try last known location first
         fusedLocationClient.lastLocation.addOnSuccessListener { loc ->
             if (loc != null) {
                 lastLocation = loc
-                onLocationUpdated?.invoke(loc) // Immediately center map
+                onLocationUpdated?.invoke(loc)
             }
         }
 
-        // Then check if GPS is enabled and start updates
         val builder = LocationSettingsRequest.Builder()
             .addLocationRequest(locationRequest)
             .setAlwaysShow(true)

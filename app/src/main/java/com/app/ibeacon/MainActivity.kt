@@ -24,8 +24,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var locationProvider: LocationProvider
 
-    private val database =
-        FirebaseDatabase.getInstance().reference.child("beacons")
 
     companion object {
         private const val PERMISSION_REQUEST_CODE = 1001

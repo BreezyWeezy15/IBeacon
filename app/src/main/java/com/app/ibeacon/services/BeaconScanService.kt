@@ -19,8 +19,7 @@ import org.altbeacon.beacon.*
 
 class BeaconScanService : Service(), BeaconConsumer {
 
-    private val IBEACON_LAYOUT =
-        "m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"
+    private val IBEACON_LAYOUT = "m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"
 
     private lateinit var beaconManager: BeaconManager
     private lateinit var locationProvider: LocationProvider
