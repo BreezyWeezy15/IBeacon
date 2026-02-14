@@ -46,36 +46,10 @@ class MainActivity : AppCompatActivity() {
 
         locationProvider = LocationProvider(this)
 
-        // 🔘 Clear DB button
-        findViewById<Button>(R.id.btnClearDb).setOnClickListener {
-            showClearConfirmation()
-        }
-
         checkPermissionsAndBluetooth()
     }
 
-    // 🔥 Confirm before wiping database
-    private fun showClearConfirmation() {
-        AlertDialog.Builder(this)
-            .setTitle("Confirm Delete")
-            .setMessage("Are you sure you want to delete all beacons from database?")
-            .setPositiveButton("Yes") { _, _ ->
-                clearDatabase()
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
-    }
 
-    // 🔥 Clear beacons node only
-    private fun clearDatabase() {
-        database.removeValue()
-            .addOnSuccessListener {
-                println("Beacons database cleared successfully")
-            }
-            .addOnFailureListener {
-                it.printStackTrace()
-            }
-    }
 
     private fun checkPermissionsAndBluetooth() {
         if (!hasAllPermissions()) {
