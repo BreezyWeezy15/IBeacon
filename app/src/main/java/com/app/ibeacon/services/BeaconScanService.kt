@@ -71,6 +71,7 @@ class BeaconScanService : Service(), BeaconConsumer {
                     minor = beacon.id3.toInt(),
                     txPower = beacon.txPower,
                     rssi = beacon.rssi,
+                    distance = beacon.distance, // ✅ added distance
                     timestamp = System.currentTimeMillis(),
                     latitude = loc?.latitude,
                     longitude = loc?.longitude
