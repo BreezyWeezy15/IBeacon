@@ -53,7 +53,7 @@ class BeaconScanService : Service(), BeaconConsumer {
     override fun onBeaconServiceConnect() {
 
         val region = Region("AllBeacons", null, null, null)
-        val database = FirebaseDatabase.getInstance().reference.child("beacons")
+        val database = FirebaseDatabase.getInstance().reference.child("ibeacon")
 
         beaconManager.addRangeNotifier { beacons, _ ->
 
@@ -71,7 +71,7 @@ class BeaconScanService : Service(), BeaconConsumer {
                     minor = beacon.id3.toInt(),
                     txPower = beacon.txPower,
                     rssi = beacon.rssi,
-                    distance = beacon.distance, // ✅ added distance
+                    distance = beacon.distance,
                     timestamp = System.currentTimeMillis(),
                     latitude = loc?.latitude,
                     longitude = loc?.longitude
