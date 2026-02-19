@@ -16,7 +16,7 @@ class LocationProvider(private val context: Context) {
 
     private val locationRequest = LocationRequest.Builder(
         Priority.PRIORITY_HIGH_ACCURACY,
-        10000L // 🔥 EXACT 10 seconds
+        10000L 
     )
         .setMinUpdateIntervalMillis(10000L)
         .setMaxUpdateDelayMillis(10000L)
