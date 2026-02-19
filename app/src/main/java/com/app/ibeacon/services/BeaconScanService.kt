@@ -30,9 +30,12 @@ class BeaconScanService : Service(), BeaconConsumer {
         BeaconManager.setDebug(true)
 
         locationProvider = LocationProvider(this)
-        locationProvider.startLocationUpdates()
 
         startForeground(NOTIFICATION_ID, createNotification())
+
+        // ✅ Start location updates every 10 seconds
+        locationProvider.startLocationUpdates()
+
         setupBeaconScanner()
     }
 
@@ -121,7 +124,7 @@ class BeaconScanService : Service(), BeaconConsumer {
 
         return NotificationCompat.Builder(this, channelId)
             .setContentTitle("iBeacon Scanner Running")
-            .setContentText("Scanning iBeacons")
+            .setContentText("Scanning iBeacons + Location every 10s")
             .setSmallIcon(R.mipmap.ic_launcher)
             .setOngoing(true)
             .setContentIntent(pendingIntent)
