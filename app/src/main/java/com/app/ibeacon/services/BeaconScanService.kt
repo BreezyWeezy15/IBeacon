@@ -53,7 +53,7 @@ class BeaconScanService : Service(), BeaconConsumer {
     override fun onBeaconServiceConnect() {
 
         val region = Region("AllBeacons", null, null, null)
-        val database = FirebaseDatabase.getInstance().reference.child("ibeacon")
+        val database = FirebaseDatabase.getInstance().reference.child("beacons")
 
         beaconManager.addRangeNotifier { beacons, _ ->
 
